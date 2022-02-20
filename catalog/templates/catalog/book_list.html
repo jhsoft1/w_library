@@ -1,11 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{{ object_list }}
-<p><strong>Variable "some_data" contains:</strong> {{ some_data }}</p>
-</body>
-</html>
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Book List</h1>
+  {% if object_list %}
+  <ul>
+    {% for book in object_list %}
+      <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no books in the library.</p>
+  {% endif %}
+{% endblock %}
+{#<p><strong>Variable "some_data" contains:</strong> {{ some_data }}</p>#}
