@@ -1,5 +1,5 @@
 from django.contrib import admin
-from catalog.models import Author, Genre, Book, BookInstance, Language
+from catalog.models import Author, Genre, Book, BookInstance, Language, Whisky, Evening, EveningWhisky, Tasting
 
 
 class BooksInline(admin.TabularInline):
@@ -42,6 +42,12 @@ class BookInstanceAdmin(admin.ModelAdmin):
             'fields': ('book', 'imprint', 'id')
         }),
         ('Availability', {
-            'fields': ('status', 'due_back','borrower')
+            'fields': ('status', 'due_back', 'borrower')
         }),
     )
+
+
+admin.site.register(Whisky)
+admin.site.register(Evening)
+admin.site.register(EveningWhisky)
+admin.site.register(Tasting)

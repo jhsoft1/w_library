@@ -9,9 +9,9 @@ from django.views import generic
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from catalog.forms import RenewBookForm
-from catalog.models import Book, BookInstance, Author, Genre
+from catalog.models import Book, BookInstance, Author, Genre, Whisky
 
-FILTER_BOOKS: str = ''
+FILTER: str = ''
 FILTER_GENRES: str = 'poetry'
 
 
@@ -28,7 +28,7 @@ def index(request):
     # The 'all()' is implied by default.
     num_authors = Author.objects.count()
 
-    num_books_contain = Book.objects.filter(title__icontains=FILTER_BOOKS).count()
+    num_books_contain = Book.objects.filter(title__icontains=FILTER).count()
     num_genres_contain = Genre.objects.filter(name__icontains=FILTER_GENRES).count()
 
     # Number of visits to this view, as counted in the session variable.
@@ -41,7 +41,7 @@ def index(request):
         'num_authors': num_authors,
         'num_books_contain': num_books_contain,
         'num_genres_contain': num_genres_contain,
-        'FILTER_BOOKS': FILTER_BOOKS,
+        'FILTER': FILTER,
         'FILTER_GENRES': FILTER_GENRES,
         'num_visits': num_visits,
     }
@@ -50,30 +50,30 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
-class BookListView(generic.ListView):
-    model = Book
-    paginate_by = 10
+class WhiskyListView(generic.ListView):
+    model = Whisky
+    paginate_by = 20
 
     # context_object_name = 'my_book_list'   # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains=FILTER_BOOKS)[:5]  # Get 5 books containing the title war
     # template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location
     def get_queryset(self):
-        return Book.objects.filter(title__icontains=FILTER_BOOKS)[:100]  # Get 5 books containing the title war
+        return Whisky.objects.filter(name__icontains=FILTER)[:self.paginate_by]  # Get x books containing the title war
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the context
-        context = super(BookListView, self).get_context_data(**kwargs)
-        # Create any data and add it to the context
-        context['some_data'] = 'This is just some data'
-        return context
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get the context
+    #     context = super(BookListView, self).get_context_data(**kwargs)
+    #     # Create any data and add it to the context
+    #     context['some_data'] = 'This is just some data'
+    #     return context
 
 
 class AuthorListView(generic.ListView):
     model = Author
 
 
-class BookDetailView(generic.DetailView):
-    model = Book
+class WhiskyDetailView(generic.DetailView):
+    model = Whisky
 
 
 class AuthorDetailView(generic.DetailView):
@@ -139,16 +139,16 @@ class AuthorDelete(DeleteView):
     success_url = reverse_lazy('authors')
 
 
-class BookCreate(CreateView):
-    model = Book
+class WhiskyCreate(CreateView):
+    model = Whisky
     fields = '__all__'
 
 
-class BookUpdate(UpdateView):
-    model = Book
+class WhiskyUpdate(UpdateView):
+    model = Whisky
     fields = '__all__'  # Not recommended (potential security issue if more fields added)
 
 
-class BookDelete(DeleteView):
-    model = Book
-    success_url = reverse_lazy('books')
+class WhiskyDelete(DeleteView):
+    model = Whisky
+    success_url = reverse_lazy('whiskies')

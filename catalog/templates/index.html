@@ -3,8 +3,8 @@
 {% block title %}<title>Jens' Library</title>{% endblock %}
 
 {% block content %}
-  <h1>Local Library Home</h1>
-  <p>Welcome to LocalLibrary, a website developed by <em>Mozilla Developer Network</em>!</p>
+  <h1>Whisky Library Home</h1>
+  <p>Welcome to Whisky Library, a website developed by <em>jhsoft</em>!</p>
   <h2>Dynamic content</h2>
   <p>The library has the following record counts:</p>
   <ul>
@@ -12,7 +12,7 @@
     <li><strong>Copies:</strong> {{ num_instances }}</li>
     <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
     <li><strong>Authors:</strong> {{ num_authors }}</li>
-    <li><strong>Books with</strong> {{ FILTER_BOOKS }}: {{ num_books_contain }}</li>
+    <li><strong>Books with</strong> {{ FILTER }}: {{ num_books_contain }}</li>
     <li><strong>Genres with</strong> {{ FILTER_GENRES }}: {{ num_genres_contain }}</li>
 
   </ul>
