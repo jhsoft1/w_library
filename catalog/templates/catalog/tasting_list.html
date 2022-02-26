@@ -6,7 +6,7 @@
   <ul>
     {% for tasting in object_list %}
       <li>
-        <a href="{{ tasting.get_absolute_url }}">{{ tasting.date }} {{tasting.whiskies}}</a>
+        <a href="{{ tasting.get_absolute_url }}">{{ tasting.evening_whisky }} {{tasting.nose}} {{tasting.taste}}</a>
       </li>
     {% endfor %}
   </ul>
