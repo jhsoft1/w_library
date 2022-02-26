@@ -171,7 +171,7 @@ class Tasting(models.Model):
                        CheckConstraint(check=Q(taste__gte=0) & Q(taste__lte=10), name='taste_between_0_10')]
 
     def __str__(self):
-        return str(self.evening_whisky) + ' ' + str(self.user)
+        return str(self.evening_whisky) + ' ' + str(self.user) + ' ' + str(self.nose) + ' ' + str(self.taste)
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""

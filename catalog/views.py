@@ -11,38 +11,34 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from catalog.forms import RenewBookForm
 from catalog.models import Book, BookInstance, Author, Genre, Whisky, EveningWhisky, Evening, Tasting
 
-FILTER: str = ''
-FILTER_GENRES: str = 'poetry'
+paginate_by = 20
 
 
 def index(request):
     """View function for home page of site."""
 
     # Generate counts of some main objects
-    num_books = Book.objects.all().count()
-    num_instances = BookInstance.objects.all().count()
-
-    # Available books (status = 'a')
-    num_instances_available = BookInstance.objects.filter(status__exact='a').count()
+    num_whiskies = Whisky.objects.all().count()
+    num_evenings = Evening.objects.all().count()
+    num_tastings = Tasting.objects.count()
+    # My tastings (user = request.user)
+    if request.user.is_authenticated:
+        num_my_tastings = Tasting.objects.filter(user=request.user).count()
+    else:
+        num_my_tastings = 'We give whisky only to our friends :)'
 
     # The 'all()' is implied by default.
-    num_authors = Author.objects.count()
-
-    num_books_contain = Book.objects.filter(title__icontains=FILTER).count()
-    num_genres_contain = Genre.objects.filter(name__icontains=FILTER_GENRES).count()
+    num_eveningwhiskies = EveningWhisky.objects.count()
 
     # Number of visits to this view, as counted in the session variable.
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
     context = {
-        'num_books': num_books,
-        'num_instances': num_instances,
-        'num_instances_available': num_instances_available,
-        'num_authors': num_authors,
-        'num_books_contain': num_books_contain,
-        'num_genres_contain': num_genres_contain,
-        'FILTER': FILTER,
-        'FILTER_GENRES': FILTER_GENRES,
+        'num_whiskies': num_whiskies,
+        'num_evenings': num_evenings,
+        'num_tastings': num_tastings,
+        'num_my_tastings': num_my_tastings,
+        'num_eveningwhiskies': num_eveningwhiskies,
         'num_visits': num_visits,
     }
 
@@ -52,13 +48,12 @@ def index(request):
 
 class WhiskyListView(generic.ListView):
     model = Whisky
-    paginate_by = 20
 
     # context_object_name = 'my_book_list'   # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains=FILTER_BOOKS)[:5]  # Get 5 books containing the title war
     # template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location
     def get_queryset(self):
-        return Whisky.objects.filter(name__icontains=FILTER)[:self.paginate_by]  # Get x books containing the title war
+        return Whisky.objects.filter[:paginate_by]  # Get x books containing the title war
 
     # def get_context_data(self, **kwargs):
     #     # Call the base implementation first to get the context
@@ -188,6 +183,15 @@ class TastingDetailView(generic.DetailView):
 class TastingCreate(CreateView):
     model = Tasting
     fields = '__all__'
+
+
+class TastingNext(CreateView):
+    model = Tasting
+    fields = '__all__'
+    template_name = 'catalog/tasting_next_form.html'
+
+    def get_queryset(self):
+        return Tasting.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
 
 
 class TastingUpdate(UpdateView):

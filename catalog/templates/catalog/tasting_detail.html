@@ -2,17 +2,20 @@
 
 {% block content %}
   <h1>Tasting: {{ tasting.evening_whisky }}</h1>
+    <a>{{ tasting.user }} {{tasting.nose}} {{tasting.taste}}</a>
 
   <p><strong>Whiskies:</strong> {{ tasting.evening_whisky.whisky.all|join:", " }}</p>
 
 <div style="margin-left:20px;margin-top:20px">
 <h4>My Tastings today</h4>
-
+{{ tasting }} set: {{ tasting.evening_whisky.evening.eveningwhisky_set }}
+{#    all: {{ tasting.evening_whisky.evening.whiskies.all }}#}
+all: {{ tasting.evening_whisky.evening.eveningwhisky_set.all }}
 <dl>
-{% for tasting in author.book_set.all %}
-  <dt><a href="{% url 'tasting-detail' tasting.pk %}">{{tasting}}</a> </dt>
-  <dd>{{tasting.nose}}</dd>
-  <dd>{{tasting.taste}}</dd>
+
+{% for ew_i in tasting.evening_whisky.evening.eveningwhisky_set.all %}
+  <dt><a href="{% url 'eveningwhisky-detail' ew_i.pk %}">{{ew_i}}</a> {{ew_i.evening}} {{ew_i.whisky}}</dt>
+{#{{ whisky_i }}#}
 {% endfor %}
 </dl>
 

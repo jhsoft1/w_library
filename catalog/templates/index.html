@@ -1,20 +1,24 @@
 {% extends "base_generic.html" %}
 
-{% block title %}<title>Jens' Library</title>{% endblock %}
+{% block title %}<title>Jens' Tastings</title>{% endblock %}
 
 {% block content %}
-  <h1>Whisky Library Home</h1>
-  <p>Welcome to Whisky Library, a website developed by <em>jhsoft</em>!</p>
-  <h2>Dynamic content</h2>
+  <h1>Whisky Tasting Home</h1>
+  <p>Welcome to Whisky Tasting, by <em>jhsoft</em>!</p>
+  <h2>Some numbers</h2>
   <p>The library has the following record counts:</p>
   <ul>
-    <li><strong>Books:</strong> {{ num_books }}</li>
-    <li><strong>Copies:</strong> {{ num_instances }}</li>
-    <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
-    <li><strong>Authors:</strong> {{ num_authors }}</li>
-    <li><strong>Books with</strong> {{ FILTER }}: {{ num_books_contain }}</li>
-    <li><strong>Genres with</strong> {{ FILTER_GENRES }}: {{ num_genres_contain }}</li>
+    <li><strong>Whiskies:</strong> {{ num_whiskies }}</li>
+    <li><strong>Evenings:</strong> {{ num_evenings }}</li>
+    <li><strong>Eveningwhiskies:</strong> {{ num_eveningwhiskies }}</li>
+    <li><strong>Ratings:</strong> {{ num_tastings }}</li>
+    <li><strong>My Ratings</strong> {{ user }}: {{ num_my_tastings }}</li>
 
   </ul>
   <p>You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</p>
+    {%  if user.is_authenticated %}
+        <a href="{% url 'next-rating' %}">Rate your whisky</a>
+    {% else %}
+        <a href="{% url 'login'%}?next={{request.path}}">You should login first</a><
+    {% endif %}
 {% endblock %}
