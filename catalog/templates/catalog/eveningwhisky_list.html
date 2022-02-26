@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Evening Whisky List</h1>
+  {% if object_list %}
+  <ul>
+    {% for eveningwhisky in object_list %}
+      <li>
+        <a href="{{ eveningwhisky.get_absolute_url }}">{{ eveningwhisky.evening }} {{eveningwhisky.whisky}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no eveningwhiskies in the library.</p>
+  {% endif %}
+{% endblock %}

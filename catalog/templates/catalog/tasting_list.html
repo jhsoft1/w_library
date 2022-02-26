@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>My Tasting List today</h1>
+  {% if object_list %}
+  <ul>
+    {% for tasting in object_list %}
+      <li>
+        <a href="{{ tasting.get_absolute_url }}">{{ tasting.date }} {{tasting.whiskies}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>I have no tastings today in the library.</p>
+  {% endif %}
+{% endblock %}

@@ -9,7 +9,7 @@ from django.views import generic
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from catalog.forms import RenewBookForm
-from catalog.models import Book, BookInstance, Author, Genre, Whisky
+from catalog.models import Book, BookInstance, Author, Genre, Whisky, EveningWhisky, Evening, Tasting
 
 FILTER: str = ''
 FILTER_GENRES: str = 'poetry'
@@ -68,16 +68,16 @@ class WhiskyListView(generic.ListView):
     #     return context
 
 
-class AuthorListView(generic.ListView):
-    model = Author
+class EveningWhiskyListView(generic.ListView):
+    model = EveningWhisky
 
 
 class WhiskyDetailView(generic.DetailView):
     model = Whisky
 
 
-class AuthorDetailView(generic.DetailView):
-    model = Author
+class EveningWhiskyDetailView(generic.DetailView):
+    model = EveningWhisky
 
 
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
@@ -123,20 +123,20 @@ def renew_book_librarian(request, pk):
     return render(request, 'catalog/book_renew_librarian.html', context)
 
 
-class AuthorCreate(CreateView):
-    model = Author
-    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
-    initial = {'date_of_death': '11/06/2020'}
+class EveningWhiskyCreate(CreateView):
+    model = EveningWhisky
+    fields = '__all__'
+    # initial = {'date_of_death': '11/06/2020'}
 
 
-class AuthorUpdate(UpdateView):
-    model = Author
+class EveningWhiskyUpdate(UpdateView):
+    model = EveningWhisky
     fields = '__all__'  # Not recommended (potential security issue if more fields added)
 
 
-class AuthorDelete(DeleteView):
-    model = Author
-    success_url = reverse_lazy('authors')
+class EveningWhiskyDelete(DeleteView):
+    model = EveningWhisky
+    success_url = reverse_lazy('eveningwhiskies')
 
 
 class WhiskyCreate(CreateView):
@@ -152,3 +152,49 @@ class WhiskyUpdate(UpdateView):
 class WhiskyDelete(DeleteView):
     model = Whisky
     success_url = reverse_lazy('whiskies')
+
+
+class EveningListView(generic.ListView):
+    model = Evening
+
+
+class EveningDetailView(generic.DetailView):
+    model = Evening
+
+
+class EveningCreate(CreateView):
+    model = Evening
+    fields = '__all__'
+
+
+class EveningUpdate(UpdateView):
+    model = Evening
+    fields = '__all__'  # Not recommended (potential security issue if more fields added)
+
+
+class EveningDelete(DeleteView):
+    model = Evening
+    success_url = reverse_lazy('evenings')
+
+
+class TastingListView(generic.ListView):
+    model = Tasting
+
+
+class TastingDetailView(generic.DetailView):
+    model = Tasting
+
+
+class TastingCreate(CreateView):
+    model = Tasting
+    fields = '__all__'
+
+
+class TastingUpdate(UpdateView):
+    model = Tasting
+    fields = '__all__'  # Not recommended (potential security issue if more fields added)
+
+
+class TastingDelete(DeleteView):
+    model = Tasting
+    success_url = reverse_lazy('tastings')

@@ -138,6 +138,10 @@ class Evening(models.Model):
     def __str__(self):
         return str(self.date)
 
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this book."""
+        return reverse('evening-detail', args=[str(self.pk)])
+
 
 class EveningWhisky(models.Model):
     evening = ForeignKey(Evening, on_delete=DO_NOTHING)
@@ -149,6 +153,10 @@ class EveningWhisky(models.Model):
 
     def __str__(self):
         return str(self.evening) + ' ' + str(self.whisky)
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular author instance."""
+        return reverse('eveningwhisky-detail', args=[str(self.id)])
 
 
 class Tasting(models.Model):
@@ -164,3 +172,7 @@ class Tasting(models.Model):
 
     def __str__(self):
         return str(self.evening_whisky) + ' ' + str(self.user)
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular author instance."""
+        return reverse('tasting-detail', args=[str(self.id)])

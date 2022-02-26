@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Tasting: {{ tasting.evening_whisky }}</h1>
+
+  <p><strong>Whiskies:</strong> {{ tasting.evening_whisky.whisky.all|join:", " }}</p>
+
+<div style="margin-left:20px;margin-top:20px">
+<h4>My Tastings today</h4>
+
+<dl>
+{% for tasting in author.book_set.all %}
+  <dt><a href="{% url 'tasting-detail' tasting.pk %}">{{tasting}}</a> </dt>
+  <dd>{{tasting.nose}}</dd>
+  <dd>{{tasting.taste}}</dd>
+{% endfor %}
+</dl>
+
+</div>
+
+{% endblock %}
