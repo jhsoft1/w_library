@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import F, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -72,7 +73,12 @@ class EveningWhiskyTodayListView(generic.ListView):
     template_name = 'catalog/eveningwhisky_today_list.html'
 
     def get_queryset(self):
-        return EveningWhisky.objects.filter(evening=datetime.date.today())
+        # return Voter.objects.annotate(value=F('vote__value'), year=F('vote__year')).values().filter(
+        # name=self.request.user)
+        # return EveningWhisky.objects.filter(evening=datetime.date.today())
+        return EveningWhisky.objects.filter(evening=datetime.date.today()). \
+            annotate(nose=F('tasting__nose'), taste=F('tasting__taste'), user=F('tasting__user__username')).values() \
+            # .filter(Q(user=self.request.user) | Q(user=None)) #  liefert nicht die von anderen bereits bewerteten Whiskies
 
 
 class WhiskyDetailView(generic.DetailView):

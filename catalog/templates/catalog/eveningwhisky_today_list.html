@@ -6,8 +6,9 @@
   <ul>
     {% for eveningwhisky in object_list %}
       <li>
-        <a href="{{ eveningwhisky.get_absolute_url }}"> {{eveningwhisky.whisky}}</a>
-        <p>{{eveningwhisky.tasting_set.filter(user=request.user)}}</p>
+{#        <a href="{{ eveningwhisky.get_absolute_url }}"> {{eveningwhisky.whisky}}</a>#}
+{#        <p>{{eveningwhisky.tasting_set.filter(user=request.user)}}</p>#}
+      {{ eveningwhisky }}
       </li>
     {% endfor %}
   </ul>
