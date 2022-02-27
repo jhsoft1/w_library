@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import F, Q
+from django.db.models import F, Q, FilteredRelation
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -76,9 +76,16 @@ class EveningWhiskyTodayListView(generic.ListView):
         # return Voter.objects.annotate(value=F('vote__value'), year=F('vote__year')).values().filter(
         # name=self.request.user)
         # return EveningWhisky.objects.filter(evening=datetime.date.today())
+        # return EveningWhisky.objects.filter(evening=datetime.date.today()). \
+        #     annotate(nose=F('tasting__nose'), taste=F('tasting__taste'), user=F('tasting__user__username')).values() \
+        #    .filter(Q(user=self.request.user) | Q(user=None))#liefert nicht die von anderen bereits bewerteten Whiskies
+
         return EveningWhisky.objects.filter(evening=datetime.date.today()). \
-            annotate(nose=F('tasting__nose'), taste=F('tasting__taste'), user=F('tasting__user__username')).values() \
-            # .filter(Q(user=self.request.user) | Q(user=None)) #  liefert nicht die von anderen bereits bewerteten Whiskies
+            annotate(tasting_user=FilteredRelation('tasting', condition=Q(tasting__user__username=self.request.user))).\
+            values('whisky', 'tasting_user__nose', 'tasting_user__taste')
+
+        # return Voter.objects.annotate(votes2020=FilteredRelation(
+        #     'vote', condition=Q(vote__year=2020))).values('name', 'votes2020__value', 'votes2020__year')
 
 
 class WhiskyDetailView(generic.DetailView):
