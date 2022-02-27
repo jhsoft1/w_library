@@ -12,8 +12,6 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from catalog.forms import RenewBookForm
 from catalog.models import BookInstance, Whisky, EveningWhisky, Evening, Tasting
 
-paginate_by = 20
-
 
 def index(request):
     """View function for home page of site."""
@@ -49,12 +47,13 @@ def index(request):
 
 class WhiskyListView(generic.ListView):
     model = Whisky
+    paginate_by = 5
 
     # context_object_name = 'my_book_list'   # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains=FILTER_BOOKS)[:5]  # Get 5 books containing the title war
     # template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location
-    def get_queryset(self):
-        return Whisky.objects.filter[:paginate_by]  # Get x books containing the title war
+    # def get_queryset(self):
+    #     return Whisky.objects.all()
 
     # def get_context_data(self, **kwargs):
     #     # Call the base implementation first to get the context
@@ -79,11 +78,12 @@ class EveningWhiskyTodayListView(generic.ListView):
         # return EveningWhisky.objects.filter(evening=datetime.date.today()). \
         #     annotate(nose=F('tasting__nose'), taste=F('tasting__taste'), user=F('tasting__user__username')).values() \
         #    .filter(Q(user=self.request.user) | Q(user=None))#liefert nicht die von anderen bereits bewerteten Whiskies
-
-        return EveningWhisky.objects.filter(evening=datetime.date.today()). \
-            annotate(tasting_user=FilteredRelation('tasting', condition=Q(tasting__user__username=self.request.user))).\
-            values('whisky', 'tasting_user__nose', 'tasting_user__taste')
-
+        if self.request.user.is_authenticated:
+            return EveningWhisky.objects.filter(evening=datetime.date.today()). \
+                annotate(tasting_user=FilteredRelation('tasting', condition=Q(tasting__user=self.request.user))). \
+                values('whisky', 'tasting_user__nose', 'tasting_user__taste')
+        else:
+            return EveningWhisky.objects.filter(evening=datetime.date.today()).values('whisky')
         # return Voter.objects.annotate(votes2020=FilteredRelation(
         #     'vote', condition=Q(vote__year=2020))).values('name', 'votes2020__value', 'votes2020__year')
 
