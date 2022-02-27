@@ -9,7 +9,7 @@ from django.views import generic
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from catalog.forms import RenewBookForm
-from catalog.models import Book, BookInstance, Author, Genre, Whisky, EveningWhisky, Evening, Tasting
+from catalog.models import BookInstance, Whisky, EveningWhisky, Evening, Tasting
 
 paginate_by = 20
 
@@ -65,6 +65,14 @@ class WhiskyListView(generic.ListView):
 
 class EveningWhiskyListView(generic.ListView):
     model = EveningWhisky
+
+
+class EveningWhiskyTodayListView(generic.ListView):
+    model = EveningWhisky
+    template_name = 'catalog/eveningwhisky_today_list.html'
+
+    def get_queryset(self):
+        return EveningWhisky.objects.filter(evening=datetime.date.today())
 
 
 class WhiskyDetailView(generic.DetailView):
@@ -185,13 +193,13 @@ class TastingCreate(CreateView):
     fields = '__all__'
 
 
-class TastingNext(CreateView):
-    model = Tasting
-    fields = '__all__'
-    template_name = 'catalog/tasting_next_form.html'
-
-    def get_queryset(self):
-        return Tasting.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+# class TastingNext(CreateView):
+#     model = Tasting
+#     fields = '__all__'
+#     template_name = 'catalog/tasting_next_form.html'
+#
+#     def get_queryset(self):
+#         return Tasting.objects.filter(self.evening_whisky.evening=today)
 
 
 class TastingUpdate(UpdateView):
