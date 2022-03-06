@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import CreateView, UpdateView, DeleteView
+
+from catalog.forms import UserCreationForm
 from catalog.models import Whisky, EveningWhisky, Evening, Tasting
 
 
@@ -67,6 +69,7 @@ class WhiskyDetailView(generic.DetailView):
 
 class EveningWhiskyDetailView(generic.DetailView):
     model = EveningWhisky
+
 
 #
 # @login_required
@@ -193,3 +196,13 @@ class TastingValueUpdate(UpdateView):
     model = Tasting
     fields = ['nose', 'taste']
     success_url = reverse_lazy('eveningwhiskies-today')
+
+
+class MySignupView(CreateView):
+    form_class = UserCreationForm
+    # form = UserCreationForm
+    # model = User
+    # fields = '__all__'
+    # success_url = 'accounts/login'
+    success_url = reverse_lazy('login')
+    template_name = 'catalog/signup.html'

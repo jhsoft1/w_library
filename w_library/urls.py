@@ -25,3 +25,18 @@ urlpatterns = [
                   path('', RedirectView.as_view(url='catalog/')),
                   path('accounts/', include('django.contrib.auth.urls')),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# from menu.views import MySignupView, MyLoginView, MyLogoutView, home_view
+# path('signup', MySignupView.as_view()),
+# path('login/', RedirectView.as_view(url='/login')),
+# path('signup/', RedirectView.as_view(url='/signup')),
+# class MyLogoutView(LogoutView):
+#     form_class = AuthenticationForm
+#     redirect_authenticated_user = True
+#     template_name = 'menu/logout.html'
+#
+#
+# class MySignupView(CreateView):
+#     form_class = UserCreationForm
+#     success_url = 'login'
+#     template_name = 'menu/signup.html'

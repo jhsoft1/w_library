@@ -27,5 +27,7 @@ urlpatterns = [
     path('tasting/<int:pk>/update/', views.TastingUpdate.as_view(), name='tasting-update'),
     path('tasting/<int:pk>/update-value/', views.TastingValueUpdate.as_view(), name='tasting-value-update'),
     path('tasting/<int:pk>/delete/', views.TastingDelete.as_view(), name='tasting-delete'),
+    path('signup/', views.MySignupView.as_view(), name='signup'),
+
 
 ]
