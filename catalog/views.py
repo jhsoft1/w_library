@@ -41,7 +41,7 @@ def index(request):
 
 class WhiskyListView(generic.ListView):
     model = Whisky
-    paginate_by = 5
+    paginate_by = 20
 
 
 class EveningWhiskyListView(generic.ListView):
@@ -105,7 +105,6 @@ class EveningWhiskyDetailView(generic.DetailView):
 class EveningWhiskyCreate(CreateView):
     model = EveningWhisky
     fields = '__all__'
-    # initial = {'date_of_death': '11/06/2020'}
 
 
 class EveningWhiskyUpdate(UpdateView):

@@ -1,20 +1,28 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/minimal-table.css' %}">
   <h1>Evening Whisky List {{ eveningwhisky.evening }}</h1>
   {% if object_list %}
-  <ul>
+  <table>
+        <tr>
+        <th scope="col">Whisky</th>
+        <th scope="col">Nose</th>
+        <th scope="col">Taste</th>
+      </tr>
     {% for object in object_list %}
-      <li>
+      <tr>
           {% if object.tasting %}
-            <a href="/catalog/tasting/{{ object.tasting }}/update-value/">
-                {{ object.whisky_id }} {{ object.tasting_user__nose }} {{ object.tasting_user__taste }}</a>
+            <td><a href="/catalog/tasting/{{ object.tasting }}/update-value/">
+                {{ object.whisky_id }} </a></td><td>{{ object.tasting_user__nose }} </td>
+                <td>{{ object.tasting_user__taste }}</td>
           {% else %}
-            <a href="/catalog/tasting/create/{{ object.id }}">{{ object.whisky_id }}</a>
+            <td><a href="/catalog/tasting/create/{{ object.id }}">{{ object.whisky_id }}</a></td>
           {% endif %}
-      </li>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
     <p>Today there are no eveningwhiskies in the library.</p>
   {% endif %}
