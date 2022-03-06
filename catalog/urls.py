@@ -23,8 +23,10 @@ urlpatterns = [
     path('evening/<str:pk>/delete/', views.EveningDelete.as_view(), name='evening-delete'),
     path('tastings/', views.TastingListView.as_view(), name='tastings'),
     path('tasting/create/', views.TastingCreate.as_view(), name='tasting-create'),
+    path('tasting/create/<int:eveningwhisky>', views.TastingEveningWhiskyCreate.as_view(), name='tasting-eveningwhisky-create'),
     path('tasting/<int:pk>', views.TastingDetailView.as_view(), name='tasting-detail'),
     path('tasting/<int:pk>/update/', views.TastingUpdate.as_view(), name='tasting-update'),
+    path('tasting/<int:pk>/update-value/', views.TastingValueUpdate.as_view(), name='tasting-value-update'),
     path('tasting/<int:pk>/delete/', views.TastingDelete.as_view(), name='tasting-delete'),
 
 ]

@@ -4,11 +4,14 @@
   <h1>Evening Whisky List {{ eveningwhisky.evening }}</h1>
   {% if object_list %}
   <ul>
-    {% for eveningwhisky in object_list %}
+    {% for object in object_list %}
       <li>
-{#        <a href="{{ eveningwhisky.get_absolute_url }}"> {{eveningwhisky.whisky}}</a>#}
-{#        <p>{{eveningwhisky.tasting_set.filter(user=request.user)}}</p>#}
-      {{ eveningwhisky }}
+          {% if object.tasting %}
+            <a href="/catalog/tasting/{{ object.tasting }}/update-value/">
+                {{ object.whisky_id }} {{ object.tasting_user__nose }} {{ object.tasting_user__taste }}</a>
+          {% else %}
+            <a href="/catalog/tasting/create/{{ object.id }}">{{ object.whisky_id }}</a>
+          {% endif %}
       </li>
     {% endfor %}
   </ul>

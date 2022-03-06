@@ -72,20 +72,12 @@ class EveningWhiskyTodayListView(generic.ListView):
     template_name = 'catalog/eveningwhisky_today_list.html'
 
     def get_queryset(self):
-        # return Voter.objects.annotate(value=F('vote__value'), year=F('vote__year')).values().filter(
-        # name=self.request.user)
-        # return EveningWhisky.objects.filter(evening=datetime.date.today())
-        # return EveningWhisky.objects.filter(evening=datetime.date.today()). \
-        #     annotate(nose=F('tasting__nose'), taste=F('tasting__taste'), user=F('tasting__user__username')).values() \
-        #    .filter(Q(user=self.request.user) | Q(user=None))#liefert nicht die von anderen bereits bewerteten Whiskies
         if self.request.user.is_authenticated:
             return EveningWhisky.objects.filter(evening=datetime.date.today()). \
                 annotate(tasting_user=FilteredRelation('tasting', condition=Q(tasting__user=self.request.user))). \
-                values('whisky', 'tasting_user__nose', 'tasting_user__taste')
+                values('id', 'whisky_id', 'tasting_user__nose', 'tasting_user__taste', 'tasting')
         else:
-            return EveningWhisky.objects.filter(evening=datetime.date.today()).values('whisky')
-        # return Voter.objects.annotate(votes2020=FilteredRelation(
-        #     'vote', condition=Q(vote__year=2020))).values('name', 'votes2020__value', 'votes2020__year')
+            return EveningWhisky.objects.filter(evening=datetime.date.today()).values()
 
 
 class WhiskyDetailView(generic.DetailView):
@@ -217,9 +209,29 @@ class TastingCreate(CreateView):
 
 class TastingUpdate(UpdateView):
     model = Tasting
-    fields = '__all__'  # Not recommended (potential security issue if more fields added)
+    fields = '__all__'
 
 
 class TastingDelete(DeleteView):
     model = Tasting
     success_url = reverse_lazy('tastings')
+
+
+class TastingEveningWhiskyCreate(CreateView):
+    model = Tasting
+    fields = ['nose', 'taste']
+    success_url = reverse_lazy('eveningwhiskies-today')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        # print(form.instance.user)
+        # print(self.kwargs['eveningwhisky'])
+        form.instance.evening_whisky = EveningWhisky(self.kwargs['eveningwhisky'])
+        return super().form_valid(form)
+
+
+class TastingValueUpdate(UpdateView):
+    model = Tasting
+    fields = ['nose', 'taste']
+    success_url = reverse_lazy('eveningwhiskies-today')
+    
