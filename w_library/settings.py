@@ -14,7 +14,7 @@ from pathlib import Path
 # import os  # needed by code below
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from w_library.jhs_orig import YOUR_EMAIL_PASSWORD
+from w_library.jhs import YOUR_EMAIL_PASSWORD
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
