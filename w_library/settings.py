@@ -14,6 +14,8 @@ from pathlib import Path
 import os  # needed by code below
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import django_heroku
+
 from w_library.jhs import YOUR_EMAIL_PASSWORD
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -140,3 +142,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jhsoft1@gmail.com'
 # EMAIL_HOST_PASSWORD = YOUR_EMAIL_PASSWORD
 # USE_L10N = True
+django_heroku.settings(locals())
+
