@@ -37,7 +37,6 @@ def index(request):
         'num_eveningwhiskies': num_eveningwhiskies,
         'num_visits': num_visits,
     }
-    print(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
