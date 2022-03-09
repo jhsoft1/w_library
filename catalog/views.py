@@ -7,6 +7,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 
 from catalog.forms import UserCreationForm
 from catalog.models import Whisky, EveningWhisky, Evening, Tasting
+from w_library.settings import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 
 def index(request):
@@ -36,6 +37,7 @@ def index(request):
         'num_eveningwhiskies': num_eveningwhiskies,
         'num_visits': num_visits,
     }
+    print(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
