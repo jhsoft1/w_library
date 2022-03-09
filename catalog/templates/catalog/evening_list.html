@@ -6,7 +6,7 @@
   <ul>
     {% for evening in object_list %}
       <li>
-        <a href="{{ evening.get_absolute_url }}">{{ evening.date }} {{eveningwhisky.whiskies}}</a>
+        <a href="{{ evening.get_absolute_url }}"><strong>{{ evening.date }}</strong> {{ evening.whiskies.all|join:", " }}</a>
       </li>
     {% endfor %}
   </ul>

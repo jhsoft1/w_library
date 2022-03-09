@@ -17,12 +17,15 @@
         <ul class="sidebar-nav">
           <li><a href="{% url 'index' %}">Home</a></li>
           <li><a href="{% url 'whiskies' %}">All Whiskies</a></li>
-          <li><a href="{% url 'eveningwhiskies' %}">All EveningWhiskies</a></li>
+{#          <li><a href="{% url 'eveningwhiskies' %}">All EveningWhiskies</a></li>#}
           <li><a href="{% url 'evenings' %}">All Evenings</a></li>
-          <li><a href="{% url 'tastings' %}">All Tastings</a></li>
+{#          <li><a href="{% url 'tastings' %}">All Tastings</a></li>#}
             {% if user.is_authenticated %}
                 <li>User: {{ user.get_username }}</li>
-                <li><a href="{% url 'eveningwhiskies-today' %}">Rate Whiskies</a></li>
+                <li><a href="{% url 'eveningwhiskies-today' %}"><strong>Rate Whiskies</strong></a></li>
+                <li><a href="{% url 'whisky-create' %}">Add new sort of Whisky</a></li>
+                <li><a href="{% url 'evening-create' %}">New Whisky tasting evening</a></li>
+                <li><a href="{% url 'eveningwhisky-create' %}">Add another Whisky to an evening</a></li>
                 <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
             {% else %}
                 <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
