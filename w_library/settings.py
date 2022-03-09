@@ -16,8 +16,6 @@ import os  # needed by code below
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import django_heroku
 
-from w_library.jhs import YOUR_EMAIL_PASSWORD
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -140,6 +138,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jhsoft1@gmail.com'
+EMAIL_HOST_PASSWORD = int(os.environ.get('TIMES', 3))
 # USE_L10N = True
 django_heroku.settings(locals())
-EMAIL_HOST_PASSWORD = YOUR_EMAIL_PASSWORD
