@@ -1,9 +1,10 @@
-from datetime import date
+import datetime
+# from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import ForeignKey, DO_NOTHING, UniqueConstraint, CheckConstraint, Q
 from django.urls import reverse  # Used to generate URLs by reversing the URL patterns
-import uuid  # Required for unique book instances
+# import uuid  # Required for unique book instances
 
 
 # class Genre(models.Model):
@@ -133,7 +134,7 @@ class Whisky(models.Model):
 
 
 class Evening(models.Model):
-    date = models.DateField(primary_key=True)
+    date = models.DateField(primary_key=True, default=datetime.date.today())
     whiskies = models.ManyToManyField(Whisky, through='EveningWhisky')
     ordering = ['-date']
 
