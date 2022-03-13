@@ -3,8 +3,19 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.db.models import ForeignKey, DO_NOTHING, UniqueConstraint, CheckConstraint, Q
+from django.db.models import ForeignKey, DO_NOTHING, UniqueConstraint, CheckConstraint, Q, IntegerField
 from django.urls import reverse  # Used to generate URLs by reversing the URL patterns
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+
+def validate_empty_or_0_10(value):
+    if value is not None:
+        if value > 10 or value < 0:
+            raise ValidationError(
+                _('%(value)s is not between 0 and 10'),
+                params={'value': value},
+            )
 
 
 class Whisky(models.Model):
@@ -22,13 +33,20 @@ class Whisky(models.Model):
         return reverse('whisky-detail', args=[str(self.pk)])
 
 
+# class Person(models.Model): Beispiel -> '/' im Namen ausschließen
+#     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")
+#     phoneNumber = models.CharField(validators = [phoneNumberRegex], max_length = 16, unique = True)
+
+
 class Evening(models.Model):
     date = models.DateField(primary_key=True,
                             # default=datetime.date.today(),
                             default=django.utils.timezone.now
                             )
     whiskies = models.ManyToManyField(Whisky, through='EveningWhisky')
-    # ordering = ['-date']
+
+    class Meta:
+        ordering = ['-date']
 
     def __str__(self):
         return str(self.date)
@@ -41,13 +59,16 @@ class Evening(models.Model):
 class EveningWhisky(models.Model):
     evening = ForeignKey(Evening, on_delete=DO_NOTHING)
     whisky = ForeignKey(Whisky, on_delete=DO_NOTHING)
+    order = IntegerField(verbose_name='order of the day', null=True)
 
     class Meta:
+        ordering = ['order']
         verbose_name_plural = "EveningWhiskies"
         constraints = [UniqueConstraint(fields=['evening', 'whisky'], name='evening_whisky')]
 
     def __str__(self):
-        return str(self.evening) + ' ' + str(self.whisky)
+        # return str(self.evening) + ' ' + str(self.whisky)
+        return f'{self.evening} {self.whisky} {self.order}'
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
@@ -59,7 +80,9 @@ class Tasting(models.Model):
     nose = models.DecimalField("nose/Geruch (0-10)", max_digits=3, decimal_places=1,
                                validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], )
     taste = models.DecimalField("taste/Geschmack (0-10)", max_digits=3, decimal_places=1,
-                                validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], )
+                                validators=[validate_empty_or_0_10],
+                                # validators=[MinValueValidator(0.0), MaxValueValidator(10.0)],
+                                null=True)
     user = ForeignKey(User, on_delete=DO_NOTHING)
 
     class Meta:
@@ -68,7 +91,8 @@ class Tasting(models.Model):
                        CheckConstraint(check=Q(taste__gte=0) & Q(taste__lte=10), name='taste_between_0_10')]
 
     def __str__(self):
-        return str(self.evening_whisky) + ' ' + str(self.user) + ' ' + str(self.nose) + ' ' + str(self.taste)
+        # return str(self.evening_whisky) + ' ' + str(self.user) + ' ' + str(self.nose) + ' ' + str(self.taste)
+        return f'{self.evening_whisky} {self.user} {self.nose} {self.taste}'
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
