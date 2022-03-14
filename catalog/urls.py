@@ -11,7 +11,6 @@ urlpatterns = [
     path('eveningwhiskies/', views.EveningWhiskyListView.as_view(), name='eveningwhiskies'),
     path('eveningwhiskies_today/', views.EveningWhiskyTodayListView.as_view(), name='eveningwhiskies-today'),
     path('eveningwhisky/<int:pk>', views.EveningWhiskyDetailView.as_view(), name='eveningwhisky-detail'),
-    # path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
     path('eveningwhisky/create/', views.EveningWhiskyCreate.as_view(), name='eveningwhisky-create'),
     path('eveningwhisky/<int:pk>/update/', views.EveningWhiskyUpdate.as_view(), name='eveningwhisky-update'),
     path('eveningwhisky/<int:pk>/delete/', views.EveningWhiskyDelete.as_view(), name='eveningwhisky-delete'),

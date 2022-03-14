@@ -82,7 +82,7 @@ class Tasting(models.Model):
     taste = models.DecimalField("taste/Geschmack (0-10)", max_digits=3, decimal_places=1,
                                 validators=[validate_empty_or_0_10],
                                 # validators=[MinValueValidator(0.0), MaxValueValidator(10.0)],
-                                null=True)
+                                null=True, blank=True)
     user = ForeignKey(User, on_delete=DO_NOTHING)
 
     class Meta:
