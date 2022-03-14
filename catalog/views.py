@@ -168,6 +168,11 @@ class TastingValueUpdate(UpdateView):
     fields = ['nose', 'taste', 'color', 'smokiness']
     success_url = reverse_lazy('eveningwhiskies-today')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['whisky'] = Tasting.objects.get(id=self.kwargs['pk']).evening_whisky.whisky
+        return context
+
 
 class MySignupView(CreateView):
     form_class = UserCreationForm
