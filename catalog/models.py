@@ -70,7 +70,7 @@ class EveningWhisky(models.Model):
         constraints = [UniqueConstraint(fields=['evening', 'whisky'], name='evening_whisky')]
 
     def __str__(self):
-        return f'{self.evening} {self.whisky} {self.order}'
+        return f'{self.evening_id} {self.whisky_id} {self.order}'
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""

@@ -152,6 +152,11 @@ class TastingEveningWhiskyCreate(CreateView):
     fields = ['nose', 'taste', 'color', 'smokiness']
     success_url = reverse_lazy('eveningwhiskies-today')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['whisky'] = EveningWhisky.objects.get(id=self.kwargs['eveningwhisky']).whisky_id
+        return context
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.evening_whisky = EveningWhisky(self.kwargs['eveningwhisky'])
