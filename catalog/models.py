@@ -18,8 +18,16 @@ def validate_empty_or_0_10(value):
             )
 
 
+def validate_no_slash(value):
+    if '/' in value:
+        raise ValidationError(
+            _('%(value)s must not contain /'),
+            params={'value': value},
+        )
+
+
 class Whisky(models.Model):
-    name = models.CharField(max_length=128, primary_key=True)
+    name = models.CharField(max_length=128, primary_key=True, validators=[validate_no_slash])
 
     class Meta:
         verbose_name_plural = "Whiskies"
@@ -31,11 +39,6 @@ class Whisky(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a detail record for this book."""
         return reverse('whisky-detail', args=[str(self.pk)])
-
-
-# class Person(models.Model): Beispiel -> '/' im Namen ausschließen
-#     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")
-#     phoneNumber = models.CharField(validators = [phoneNumberRegex], max_length = 16, unique = True)
 
 
 class Evening(models.Model):
@@ -67,7 +70,6 @@ class EveningWhisky(models.Model):
         constraints = [UniqueConstraint(fields=['evening', 'whisky'], name='evening_whisky')]
 
     def __str__(self):
-        # return str(self.evening) + ' ' + str(self.whisky)
         return f'{self.evening} {self.whisky} {self.order}'
 
     def get_absolute_url(self):
@@ -81,7 +83,12 @@ class Tasting(models.Model):
                                validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], )
     taste = models.DecimalField("taste/Geschmack (0-10)", max_digits=3, decimal_places=1,
                                 validators=[validate_empty_or_0_10],
-                                # validators=[MinValueValidator(0.0), MaxValueValidator(10.0)],
+                                null=True, blank=True)
+    color = models.DecimalField("color/Farbe (0-10)", max_digits=3, decimal_places=0,
+                                validators=[validate_empty_or_0_10],
+                                null=True, blank=True)
+    smokiness = models.DecimalField("smokiness/Rauchigkeit (0-10)", max_digits=3, decimal_places=0,
+                                validators=[validate_empty_or_0_10],
                                 null=True, blank=True)
     user = ForeignKey(User, on_delete=DO_NOTHING)
 
@@ -91,7 +98,6 @@ class Tasting(models.Model):
                        CheckConstraint(check=Q(taste__gte=0) & Q(taste__lte=10), name='taste_between_0_10')]
 
     def __str__(self):
-        # return str(self.evening_whisky) + ' ' + str(self.user) + ' ' + str(self.nose) + ' ' + str(self.taste)
         return f'{self.evening_whisky} {self.user} {self.nose} {self.taste}'
 
     def get_absolute_url(self):

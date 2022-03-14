@@ -149,7 +149,7 @@ class TastingDelete(DeleteView):
 
 class TastingEveningWhiskyCreate(CreateView):
     model = Tasting
-    fields = ['nose', 'taste']
+    fields = ['nose', 'taste', 'color', 'smokiness']
     success_url = reverse_lazy('eveningwhiskies-today')
 
     def form_valid(self, form):
@@ -160,15 +160,11 @@ class TastingEveningWhiskyCreate(CreateView):
 
 class TastingValueUpdate(UpdateView):
     model = Tasting
-    fields = ['nose', 'taste']
+    fields = ['nose', 'taste', 'color', 'smokiness']
     success_url = reverse_lazy('eveningwhiskies-today')
 
 
 class MySignupView(CreateView):
     form_class = UserCreationForm
-    # form = UserCreationForm
-    # model = User
-    # fields = '__all__'
-    # success_url = 'accounts/login'
     success_url = reverse_lazy('login')
     template_name = 'catalog/signup.html'
