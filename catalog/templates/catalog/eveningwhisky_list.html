@@ -1,16 +1,23 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Evening Whisky List</h1>
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/minimal-table.css' %}">
+  <h1>Evening Whisky List {{ eveningwhisky.evening }}</h1>
   {% if object_list %}
-  <ul>
-    {% for eveningwhisky in object_list %}
-      <li>
-        <a href="{{ eveningwhisky.get_absolute_url }}">{{ eveningwhisky.evening }} {{eveningwhisky.whisky}}</a>
-      </li>
+  <table>
+        <tr>
+        <th scope="col">Whisky</th>
+        <th scope="col">Order</th>
+      </tr>
+    {% for object in object_list %}
+      <tr>
+          <td><a href="{{ object.get_absolute_url }}/update">{{ object.whisky_id }} </a></td>
+          <td>{{ object.order }} </td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
-    <p>There are no eveningwhiskies in the library.</p>
+    <p>Today there are no eveningwhiskies in the library.</p>
   {% endif %}
 {% endblock %}

@@ -48,11 +48,25 @@ class WhiskyListView(generic.ListView):
 
 class EveningWhiskyListView(generic.ListView):
     model = EveningWhisky
+    queryset = EveningWhisky.objects.filter(evening=datetime.date.today())
 
 
 class EveningWhiskyTodayListView(generic.ListView):
     model = EveningWhisky
     template_name = 'catalog/eveningwhisky_today_list.html'
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return EveningWhisky.objects.filter(evening=datetime.date.today()). \
+                annotate(tasting_user=FilteredRelation('tasting', condition=Q(tasting__user=self.request.user))). \
+                values('id', 'whisky_id', 'tasting_user__nose', 'tasting_user__taste', 'tasting')
+        else:
+            return EveningWhisky.objects.filter(evening=datetime.date.today()).values()
+
+
+class EveningWhiskyResultListView(generic.ListView):
+    model = EveningWhisky
+    # template_name = 'catalog/eveningwhisky_result_list.html'
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -74,11 +88,13 @@ class EveningWhiskyDetailView(generic.DetailView):
 class EveningWhiskyCreate(CreateView):
     model = EveningWhisky
     fields = '__all__'
+    success_url = reverse_lazy('eveningwhiskies')
 
 
 class EveningWhiskyUpdate(UpdateView):
     model = EveningWhisky
     fields = '__all__'
+    success_url = reverse_lazy('eveningwhiskies')
 
 
 class EveningWhiskyDelete(DeleteView):
@@ -126,6 +142,7 @@ class EveningDelete(DeleteView):
 
 class TastingListView(generic.ListView):
     model = Tasting
+    queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today())
 
 
 class TastingDetailView(generic.DetailView):

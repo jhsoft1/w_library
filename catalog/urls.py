@@ -10,6 +10,7 @@ urlpatterns = [
     path('whisky/<str:pk>/delete/', views.WhiskyDelete.as_view(), name='whisky-delete'),
     path('eveningwhiskies/', views.EveningWhiskyListView.as_view(), name='eveningwhiskies'),
     path('eveningwhiskies_today/', views.EveningWhiskyTodayListView.as_view(), name='eveningwhiskies-today'),
+    path('eveningwhiskies_result/', views.EveningWhiskyResultListView.as_view(), name='eveningwhiskies-result'),
     path('eveningwhisky/<int:pk>', views.EveningWhiskyDetailView.as_view(), name='eveningwhisky-detail'),
     path('eveningwhisky/create/', views.EveningWhiskyCreate.as_view(), name='eveningwhisky-create'),
     path('eveningwhisky/<int:pk>/update/', views.EveningWhiskyUpdate.as_view(), name='eveningwhisky-update'),
