@@ -1,16 +1,28 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>My Tasting List today</h1>
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/minimal-table.css' %}">
+  <h1>Tasting List today {{ eveningwhisky.evening }}</h1>
   {% if object_list %}
-  <ul>
-    {% for tasting in object_list %}
-      <li>
-        <a href="{{ tasting.get_absolute_url }}">{{ tasting.evening_whisky }} {{tasting.nose}} {{tasting.taste}}</a>
-      </li>
+  <table>
+        <tr>
+            <th scope="col">Whisky</th>
+            <th scope="col">Nose</th>
+            <th scope="col">Taste</th>
+            <th scope="col">Color</th>
+            <th scope="col">Smokiness</th>
+            <th scope="col">User</th>
+      </tr>
+    {% for object in object_list %}
+      <tr>
+          <td><a href="{{ object.get_absolute_url }}/detail">{{ object.evening_whisky.whisky }} </a></td>
+          <td>{{ object.nose }} </td><td>{{ object.taste }} </td><td>{{ object.color }} </td>
+          <td>{{ object.smokiness }} </td><td>{{ object.user }} </td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
   {% else %}
-    <p>I have no tastings today in the library.</p>
+    <p>There are no tastings today in the library.</p>
   {% endif %}
 {% endblock %}
