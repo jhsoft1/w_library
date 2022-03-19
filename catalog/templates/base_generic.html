@@ -26,7 +26,7 @@
                 <li><a href="{% url 'whisky-create' %}">Add new Whisky</a></li>
                 <li><a href="{% url 'evening-create' %}">New Whisky tasting evening</a></li>
                 <li><a href="{% url 'eveningwhisky-create' %}">Add Whisky to an evening</a></li>
-                <li><a href="{% url 'eveningwhiskies-result' %}">Result</a></li>
+                <li><a href="{% url 'tastings-result' %}">Result</a></li>
                 <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
             {% else %}
                 <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
