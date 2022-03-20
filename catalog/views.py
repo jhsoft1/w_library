@@ -1,5 +1,8 @@
 import datetime
-from django.db.models import Q, FilteredRelation
+
+from django.db import IntegrityError
+from django.db.models import Q, FilteredRelation, Avg
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -129,13 +132,28 @@ class EveningDelete(DeleteView):
 
 class TastingListView(generic.ListView):
     model = Tasting
-    queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today())
+    # queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today())
+
+    def get_queryset(self):
+        queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today())
+        # print(queryset)
+        return queryset
 
 
 class TastingResultListView(generic.ListView):
     model = Tasting
+
     template_name = 'catalog/tasting_result_list.html'
-    queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today())
+    # queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today()) \
+    #     .values('evening_whisky') \
+    #     .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
+
+    def get_queryset(self):
+        queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today()) \
+            .values('evening_whisky__whisky_id') \
+            .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
+        # print(queryset)
+        return queryset
 
 
 class TastingDetailView(generic.DetailView):
@@ -170,7 +188,11 @@ class TastingEveningWhiskyCreate(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.evening_whisky = EveningWhisky(self.kwargs['eveningwhisky'])
-        return super().form_valid(form)
+        try:
+            return super().form_valid(form)
+        except IntegrityError:
+            # to do: error handling  Martin: back after create, here we cheat, should update
+            return HttpResponseRedirect('/catalog/eveningwhiskies_today')
 
 
 class TastingValueUpdate(UpdateView):
@@ -188,5 +210,3 @@ class MySignupView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'catalog/signup.html'
-
-
