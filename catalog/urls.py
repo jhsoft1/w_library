@@ -20,6 +20,7 @@ urlpatterns = [
     path('evening/<str:pk>/update/', views.EveningUpdate.as_view(), name='evening-update'),
     path('evening/<str:pk>/delete/', views.EveningDelete.as_view(), name='evening-delete'),
     path('tastings/', views.TastingListView.as_view(), name='tastings'),
+    path('tastings_result/<str:evening>', views.TastingResultListView.as_view(), name='tastings-result'),
     path('tastings_result/', views.TastingResultListView.as_view(), name='tastings-result'),
     path('tasting/create/', views.TastingCreate.as_view(), name='tasting-create'),
     path('tasting/create/<int:eveningwhisky>', views.TastingEveningWhiskyCreate.as_view(), name='tasting-eveningwhisky-create'),

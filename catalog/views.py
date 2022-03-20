@@ -148,12 +148,26 @@ class TastingResultListView(generic.ListView):
     #     .values('evening_whisky') \
     #     .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
 
+    def get_report_day(self):
+        try:
+            report_day = self.kwargs['evening']
+        except KeyError:
+            report_day = datetime.date.today()
+        return report_day
+
     def get_queryset(self):
-        queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today()) \
+        report_day = self.get_report_day()
+        # print(report_day)
+        queryset = Tasting.objects.filter(evening_whisky__evening=report_day) \
             .values('evening_whisky__whisky_id') \
             .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
         # print(queryset)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_day'] = self.get_report_day()
+        return context
 
 
 class TastingDetailView(generic.DetailView):

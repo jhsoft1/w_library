@@ -3,7 +3,7 @@
 {% block content %}
       {% load static %}
       <link rel="stylesheet" href="{% static 'css/minimal-table.css' %}">
-  <h1>Tasting Result List today (averages) {{ eveningwhisky.evening }}</h1>
+  <h1>Tasting Result List (averages) {{ report_day }}</h1>
   {% if object_list %}
   <table>
         <tr>
