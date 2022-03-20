@@ -132,6 +132,7 @@ class EveningDelete(DeleteView):
 
 class TastingListView(generic.ListView):
     model = Tasting
+
     # queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today())
 
     def get_queryset(self):
@@ -144,6 +145,7 @@ class TastingResultListView(generic.ListView):
     model = Tasting
 
     template_name = 'catalog/tasting_result_list.html'
+
     # queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today()) \
     #     .values('evening_whisky') \
     #     .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
@@ -160,8 +162,9 @@ class TastingResultListView(generic.ListView):
         # print(report_day)
         queryset = Tasting.objects.filter(evening_whisky__evening=report_day) \
             .values('evening_whisky__whisky_id') \
-            .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
-        # print(queryset)
+            .annotate(nose_taste=Avg('nose') + Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
+            # .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
+        print(queryset)
         return queryset
 
     def get_context_data(self, **kwargs):
