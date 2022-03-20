@@ -142,7 +142,7 @@ class TastingListView(generic.ListView):
 
     def get_queryset(self):
         report_day = self.get_report_day()
-        queryset = Tasting.objects.filter(evening_whisky__evening=report_day)
+        queryset = Tasting.objects.filter(evening_whisky__evening=report_day).order_by('evening_whisky')
         return queryset
 
     def get_context_data(self, **kwargs):
