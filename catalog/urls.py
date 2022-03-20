@@ -30,5 +30,4 @@ urlpatterns = [
     path('tasting/<int:pk>/delete/', views.TastingDelete.as_view(), name='tasting-delete'),
     path('signup/', views.MySignupView.as_view(), name='signup'),
 
-
 ]
