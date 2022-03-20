@@ -79,17 +79,14 @@ class EveningWhisky(models.Model):
 
 class Tasting(models.Model):
     evening_whisky = ForeignKey(EveningWhisky, on_delete=DO_NOTHING)
-    nose = models.DecimalField("nose/Geruch (0-10)", max_digits=3, decimal_places=1,
-                               validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], )
-    taste = models.DecimalField("taste/Geschmack (0-10)", max_digits=3, decimal_places=1,
-                                validators=[validate_empty_or_0_10],
-                                null=True, blank=True)
-    color = models.DecimalField("color/Farbe (0-10)", max_digits=3, decimal_places=0,
-                                validators=[validate_empty_or_0_10],
-                                null=True, blank=True)
-    smokiness = models.DecimalField("smokiness/Rauchigkeit (0-10)", max_digits=3, decimal_places=0,
-                                validators=[validate_empty_or_0_10],
-                                null=True, blank=True)
+    nose = models.DecimalField("nose/Geruch (0-10) best whisky ever=10", max_digits=3, decimal_places=1,
+                               validators=[validate_empty_or_0_10], null=True, blank=True)
+    taste = models.DecimalField("taste/Geschmack (0-10) best whisky ever=10", max_digits=3, decimal_places=1,
+                                validators=[validate_empty_or_0_10], null=True, blank=True)
+    color = models.DecimalField("color/Farbe (0-10) like water=0, Cola=10", max_digits=3, decimal_places=1,
+                                validators=[validate_empty_or_0_10], null=True, blank=True)
+    smokiness = models.DecimalField("smokiness/Rauchigkeit (0-10) in the middle of the chimney=10", max_digits=3,
+                                    decimal_places=1, validators=[validate_empty_or_0_10], null=True, blank=True)
     user = ForeignKey(User, on_delete=DO_NOTHING)
 
     class Meta:
