@@ -17,8 +17,8 @@
     {% for object in object_list %}
       <tr>
           <td><a href="{{ object.get_absolute_url }}">{{ object.evening_whisky__whisky_id }} </a></td>
-          <td>{{ object.nose }} </td><td>{{ object.taste }} </td><td>{{ object.color }} </td>
-          <td>{{ object.smokiness }} </td><td>{{ object.nose | add:object.taste }} </td>
+          <td>{{ object.nose|floatformat }} </td><td>{{ object.taste|floatformat }} </td><td>{{ object.color|floatformat }} </td>
+          <td>{{ object.smokiness|floatformat }} </td><td>{{ object.nose | add:object.taste }} </td>
       </tr>
     {% endfor %}
   </table>
