@@ -162,9 +162,10 @@ class TastingResultListView(generic.ListView):
         # print(report_day)
         queryset = Tasting.objects.filter(evening_whisky__evening=report_day) \
             .values('evening_whisky__whisky_id') \
-            .annotate(nose_taste=Avg('nose') + Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
-            # .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
-        print(queryset)
+            .annotate(nose_taste=Avg('nose') + Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness')) \
+            .order_by('-nose_taste')
+        # .annotate(nose=Avg('nose'), taste=Avg('taste'), color=Avg('color'), smokiness=Avg('smokiness'))
+        # print(queryset)
         return queryset
 
     def get_context_data(self, **kwargs):

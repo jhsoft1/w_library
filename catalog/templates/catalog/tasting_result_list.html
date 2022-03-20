@@ -16,10 +16,11 @@
       </tr>
     {% for object in object_list %}
       <tr>
-          <td><a href="{{ object.get_absolute_url }}">{{ object.evening_whisky__whisky_id }} </a></td>
+{#          <td><a href="{{ object.get_absolute_url }}">{{ object.evening_whisky__whisky_id }} </a></td>#}
 {#          <td>{{ object.nose|floatformat }} </td><td>{{ object.taste|floatformat }} </td>#}
-          <td>{{ object.color|floatformat }} </td>
-          <td>{{ object.smokiness|floatformat }} </td><td>{{ object.nose_taste|floatformat }} </td>
+          <td>{{ object.evening_whisky__whisky_id }} </td>
+          <td>{{ object.color|floatformat }} </td><td>{{ object.smokiness|floatformat }} </td>
+          <td>{{ object.nose_taste|floatformat }} </td>
 {#          <td>{{ object.smokiness|floatformat }} </td><td>{{ object.nose | add:object.taste }} </td>#}
       </tr>
     {% endfor %}
