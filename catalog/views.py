@@ -2,7 +2,7 @@ import datetime
 
 from django.db import IntegrityError
 from django.db.models import Q, FilteredRelation, Avg
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, BaseModelFormSet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -200,6 +200,12 @@ class TastingDelete(DeleteView):
     success_url = reverse_lazy('tastings')
 
 
+class MySignupView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'catalog/signup.html'
+
+
 class TastingEveningWhiskyCreate(CreateView):
     model = Tasting
     fields = ['nose', 'taste', 'color', 'smokiness']
@@ -231,11 +237,18 @@ class TastingValueUpdate(UpdateView):
         return context
 
 
+# class BaseTastingFormSet(BaseModelFormSet):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.queryset = Tasting.objects.filter(evening_whisky__evening=datetime.date.today())
+
+
 def taste_table(request):
-    ExampleFormSet = modelformset_factory(Tasting, fields=('evening_whisky', 'nose', 'taste', 'color', 'smokiness',
-                                                           'user'), extra=1)
+    ExampleFormSet = modelformset_factory(Tasting, exclude=('user',), extra=1)  # , formset=BaseTastingFormSet)
     if request.method == 'POST':
         formset = ExampleFormSet(request.POST)
+        for form in formset:
+            form.instance.user = request.user
         instances = formset.save()
 
     def get_queryset():
@@ -251,9 +264,3 @@ def taste_table(request):
     # for form in formset:
     #     print(form)
     return render(request, 'catalog/taste_table.html', {'formset': formset})
-
-
-class MySignupView(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'catalog/signup.html'
